@@ -1,11 +1,10 @@
 {
   "name": "bot",
   "version": "1.0.0",
-  "description": "shitybot",
-  "main": "index.js",
+  "description": "now this bot can ban stickers and sticker packs, and prevent users to use it in grups and supergroups.",
+  "main": "bot.js",
   "dependencies": {
     "mongodb": "^2.2.33",
-    "mongoose": "^4.12.4",
     "node-static": "^0.7.10",
     "node-telegram-bot-api": "^0.28.0"
   },
@@ -14,5 +13,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WillDonut/telegram-bot-which-hates-stickers.git"
+  },
+  "bugs": {
+    "url": "https://github.com/WillDonut/telegram-bot-which-hates-stickers/issues"
+  },
+  "homepage": "https://github.com/WillDonut/telegram-bot-which-hates-stickers#readme"
 }
