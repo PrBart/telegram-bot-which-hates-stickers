@@ -1,8 +1,13 @@
 # Telegram sticker bot
 
-now this bot can ban stickers and sticker packs, and prevent users to use it in grups and supergroups.
+This bot can ban stickers and sticker packs, and prevent users to use it in groups and supergroups.
 
-##commands
+Current username -- @fatfagbot
+bot is not running all the time (rather bot never running)
+
+
+# commands
+
 ```
 /start@{botName}
 ```
