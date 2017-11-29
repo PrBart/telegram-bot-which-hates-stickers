@@ -1,0 +1,109 @@
+const  tools = require('./tools.js');
+
+let ObjectID = require('mongodb').ObjectID;
+
+function ActionOnSticker(msg,bot,db){
+
+let chat_id = {
+            "chat_id": msg.chat.id
+        };
+
+        db.collection('Bots_data').findOne(chat_id, (err, item) => {
+            if (item != null) {
+
+              if(item.banned.packs.some(packs => packs == msg.sticker.set_name) == true || item.banned.stickers.some(sticker => sticker == msg.sticker.file_id) == true){
+                  bot.deleteMessage(msg.chat.id, msg.message_id);
+
+              }else{
+              
+                if (typeof msg.reply_to_message !== 'undefined') {
+                    bot.getMe().then(me => {
+                        if (msg.reply_to_message.from.id == me.id) {
+
+                            tools.isUserAdmin(msg, bot).then(confirmed => {
+                                    tools.AmIAdmin(msg, bot).then(
+                                        confirmed => {
+                                            const banNominee = {
+                                                pack_name: msg.sticker.set_name,
+                                                sticker_id: msg.sticker.file_id
+                                            }
+                                            const opt = {
+                                                parse_mode: 'markdown',
+                                                disable_web_page_preview: false,
+                                                reply_markup: JSON.stringify({
+                                                    inline_keyboard: [
+                                                        [{
+                                                                text: `entire pack`,
+                                                                callback_data: 'entire'
+                                                            },
+                                                            {
+                                                                text: `only this sticker`,
+                                                                callback_data: 'onlyOne'
+                                                            }
+                                                        ]
+                                                    ]
+                                                })
+                                            }
+                                            bot.sendMessage(msg.chat.id, 'do you want to ban entire pack or only one sticker?', opt);
+
+                                            bot.once('callback_query', function(msg) {
+                                                bot.answerCallbackQuery(msg.id);
+                                                tools.isUserAdmin(msg, bot).then(confirmed => {
+                                                        let chat_id = {
+                                                            "chat_id": msg.message.chat.id
+                                                        };
+                                                        db.collection('Bots_data').findOne(chat_id, (err, item) => {
+                                                            if (item != null) {
+                                                                if (msg.data == 'entire') {
+                                                                    item.banned.packs.push(banNominee.pack_name);
+                                                                    const id = {
+                                                                        '_id': new ObjectID(item._id)
+                                                                    };
+                                                                    db.collection('Bots_data').update(id, item);
+                                                                    bot.sendMessage(msg.message.chat.id, 'entire pack was banned');
+
+
+                                                                }
+                                                                if (msg.data == 'onlyOne') {
+                                                                    item.banned.stickers.push(banNominee.sticker_id);
+                                                                    const id = {
+                                                                        '_id': new ObjectID(item._id)
+                                                                    };
+                                                                    db.collection('Bots_data').update(id, item);
+                                                                    bot.sendMessage(msg.message.chat.id, 'one sticker was banned');
+
+
+                                                                }
+
+                                                            } else {
+                                                                bot.sendMessage(msg.chat.id, 'you have to start the bot with /start@fatfagbot');
+                                                            }
+                                                        });
+                                                    },
+                                                    error => {
+                                                        bot.answerCallbackQuery(msg.id, 'you are not allowed ti use it', true);
+
+
+                                                    });
+
+                                            });
+                                        },
+                                        error => {
+                                            bot.sendMessage(msg.chat.id, 'i am not an admin set me as admin');
+                                        }
+                                    );
+                                },
+                                error => {
+                                    bot.editMessageText("this user are not allowed to use it", {message_id: msg.reply_to_message.message_id, chat_id: msg.chat.id});
+                        
+                                }
+                            );
+                        };
+                    });
+                }
+              }
+            } 
+        });
+}
+
+module.exports.ActionOnSticker = ActionOnSticker;
