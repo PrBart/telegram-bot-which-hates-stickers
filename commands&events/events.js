@@ -2,6 +2,48 @@ const  tools = require('./tools.js');
 
 let ObjectID = require('mongodb').ObjectID;
 
+function gotCallBackQuery (msg, bot, db, banNominee){
+    bot.answerCallbackQuery(msg.id);
+    tools.isUserAdmin(msg, bot).then(confirmed => {
+        let chat_id = {
+            "chat_id": msg.message.chat.id
+        };
+        db.collection('Bots_data').findOne(chat_id, (err, item) => {
+            if (item != null) {
+                if (msg.data == 'entire') {
+                    item.banned.packs.push(banNominee.pack_name);
+                    const id = {
+                        '_id': new ObjectID(item._id)
+                    };
+                    db.collection('Bots_data').update(id, item);
+                    bot.sendMessage(msg.message.chat.id, 'entire pack was banned');
+
+
+                }
+                if (msg.data == 'onlyOne') {
+                    item.banned.stickers.push(banNominee.sticker_id);
+                    const id = {
+                        '_id': new ObjectID(item._id)
+                    };
+                    db.collection('Bots_data').update(id, item);
+                    bot.sendMessage(msg.message.chat.id, 'one sticker was banned');
+
+
+                }
+
+            } else {
+                bot.sendMessage(msg.chat.id, 'you have to start the bot with /start@fatfagbot');
+            }
+        });
+    },
+    error => {
+        bot.answerCallbackQuery(msg.id, 'you are not allowed ti use it', true);
+
+
+    });
+}
+
+
 function ActionOnSticker(msg,bot,db){
 
 let chat_id = {
@@ -23,10 +65,12 @@ let chat_id = {
                             tools.isUserAdmin(msg, bot).then(confirmed => {
                                     tools.AmIAdmin(msg, bot).then(
                                         confirmed => {
+
                                             const banNominee = {
                                                 pack_name: msg.sticker.set_name,
                                                 sticker_id: msg.sticker.file_id
                                             }
+                                            
                                             const opt = {
                                                 parse_mode: 'markdown',
                                                 disable_web_page_preview: false,
@@ -47,44 +91,7 @@ let chat_id = {
                                             bot.sendMessage(msg.chat.id, 'do you want to ban entire pack or only one sticker?', opt);
 
                                             bot.once('callback_query', function(msg) {
-                                                bot.answerCallbackQuery(msg.id);
-                                                tools.isUserAdmin(msg, bot).then(confirmed => {
-                                                        let chat_id = {
-                                                            "chat_id": msg.message.chat.id
-                                                        };
-                                                        db.collection('Bots_data').findOne(chat_id, (err, item) => {
-                                                            if (item != null) {
-                                                                if (msg.data == 'entire') {
-                                                                    item.banned.packs.push(banNominee.pack_name);
-                                                                    const id = {
-                                                                        '_id': new ObjectID(item._id)
-                                                                    };
-                                                                    db.collection('Bots_data').update(id, item);
-                                                                    bot.sendMessage(msg.message.chat.id, 'entire pack was banned');
-
-
-                                                                }
-                                                                if (msg.data == 'onlyOne') {
-                                                                    item.banned.stickers.push(banNominee.sticker_id);
-                                                                    const id = {
-                                                                        '_id': new ObjectID(item._id)
-                                                                    };
-                                                                    db.collection('Bots_data').update(id, item);
-                                                                    bot.sendMessage(msg.message.chat.id, 'one sticker was banned');
-
-
-                                                                }
-
-                                                            } else {
-                                                                bot.sendMessage(msg.chat.id, 'you have to start the bot with /start@fatfagbot');
-                                                            }
-                                                        });
-                                                    },
-                                                    error => {
-                                                        bot.answerCallbackQuery(msg.id, 'you are not allowed ti use it', true);
-
-
-                                                    });
+                                                gotCallBackQuery(msg, bot, db, banNominee);
 
                                             });
                                         },

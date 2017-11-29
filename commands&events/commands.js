@@ -1,5 +1,7 @@
 const  tools = require('./tools.js');
 
+let ObjectID = require('mongodb').ObjectID;
+
 function start (msg,bot,db) {
         tools.AmIAdmin(msg,bot).then(
             confirmed => {
@@ -61,8 +63,6 @@ function ban (msg,bot,db) {
 };
 
 function reset (msg,bot,db) {
-
-    let ObjectID = require('mongodb').ObjectID;
 
     tools.isUserAdmin(msg,bot).then(
             confirmed => {
