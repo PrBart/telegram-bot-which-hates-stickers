@@ -23,7 +23,7 @@ let botName = '';
 
 console.log('bot started');
 
-function AmIADmin(msg) {
+function AmIAdmin(msg) {
     return new Promise(function(resolve, reject) {
         Promise.all([bot.getChatAdministrators(msg.chat.id), bot.getMe()]).then(results => {
             for (let i = 0; i < results[0].length; i++) {
@@ -37,7 +37,7 @@ function AmIADmin(msg) {
 }
 
 
-function isuserAdmin(msg) {
+function isUserAdmin(msg) {
     if (msg.chat === undefined) {
         msg.chat = msg.message.chat;
     }
@@ -54,12 +54,13 @@ function isuserAdmin(msg) {
 }
 
 
+
 mongoClient.connect(db, function(err, db) {
     if (err) {
         return console.log(err);
     }
     bot.onText(new RegExp('/start@'+botName), function(msg) {
-        AmIADmin(msg).then(
+        AmIAdmin(msg).then(
             confirmed => {
 
                 let chat_id = {
@@ -96,7 +97,7 @@ mongoClient.connect(db, function(err, db) {
     });
     bot.onText(new RegExp('/ban@'+botName), function(msg) {
         if (msg.chat.type != 'private') {
-            AmIADmin(msg).then(
+            AmIAdmin(msg).then(
                 confirmed => {
                     let chat_id = {
                     "chat_id": msg.chat.id
@@ -136,8 +137,8 @@ mongoClient.connect(db, function(err, db) {
                     bot.getMe().then(me => {
                         if (msg.reply_to_message.from.id == me.id) {
 
-                            isuserAdmin(msg).then(confirmed => {
-                                    AmIADmin(msg).then(
+                            isUserAdmin(msg).then(confirmed => {
+                                    AmIAdmin(msg).then(
                                         confirmed => {
                                             const banNominee = {
                                                 pack_name: msg.sticker.set_name,
@@ -164,7 +165,7 @@ mongoClient.connect(db, function(err, db) {
 
                                             bot.once('callback_query', function(msg) {
                                                 bot.answerCallbackQuery(msg.id);
-                                                isuserAdmin(msg).then(confirmed => {
+                                                isUserAdmin(msg).then(confirmed => {
                                                         let chat_id = {
                                                             "chat_id": msg.message.chat.id
                                                         };
@@ -214,7 +215,6 @@ mongoClient.connect(db, function(err, db) {
                         
                                 }
                             );
-                            //
                         };
                     });
                 }
@@ -226,7 +226,7 @@ mongoClient.connect(db, function(err, db) {
 
 
     bot.onText(new RegExp('/reset@'+botName), function(msg) {
-        isuserAdmin(msg).then(
+        isUserAdmin(msg).then(
             confirmed => {
                 let chat_id = {
                     "chat_id": msg.chat.id
