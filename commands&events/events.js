@@ -1,6 +1,9 @@
 const  tools = require('./tools.js');
+const EventEmitter = require('events').EventEmitter; 
 
 let ObjectID = require('mongodb').ObjectID;
+
+const event = new EventEmitter;
 
 function gotCallBackQuery (msg, bot, db, banNominee){
     bot.answerCallbackQuery(msg.id);
@@ -17,6 +20,7 @@ function gotCallBackQuery (msg, bot, db, banNominee){
                     };
                     db.collection('Bots_data').update(id, item);
                     bot.sendMessage(msg.message.chat.id, 'entire pack was banned');
+                    bot.removeAllListeners('callback_query');
 
 
                 }
@@ -27,7 +31,7 @@ function gotCallBackQuery (msg, bot, db, banNominee){
                     };
                     db.collection('Bots_data').update(id, item);
                     bot.sendMessage(msg.message.chat.id, 'one sticker was banned');
-
+                    bot.removeAllListeners('callback_query');
 
                 }
 
@@ -37,7 +41,7 @@ function gotCallBackQuery (msg, bot, db, banNominee){
         });
     },
     error => {
-        bot.answerCallbackQuery(msg.id, 'you are not allowed ti use it', true);
+        bot.answerCallbackQuery(msg.id, 'you are not allowed to use it', true);
 
 
     });
@@ -70,7 +74,6 @@ let chat_id = {
                                                 pack_name: msg.sticker.set_name,
                                                 sticker_id: msg.sticker.file_id
                                             }
-                                            
                                             const opt = {
                                                 parse_mode: 'markdown',
                                                 disable_web_page_preview: false,
@@ -90,7 +93,10 @@ let chat_id = {
                                             }
                                             bot.sendMessage(msg.chat.id, 'do you want to ban entire pack or only one sticker?', opt);
 
-                                            bot.once('callback_query', function(msg) {
+
+
+                                            bot.on('callback_query', function (msg) {
+
                                                 gotCallBackQuery(msg, bot, db, banNominee);
 
                                             });
@@ -101,7 +107,7 @@ let chat_id = {
                                     );
                                 },
                                 error => {
-                                    bot.editMessageText("this user are not allowed to use it", {message_id: msg.reply_to_message.message_id, chat_id: msg.chat.id});
+                                    bot.editMessageText("this user is not allowed to use it", {message_id: msg.reply_to_message.message_id, chat_id: msg.chat.id});
                         
                                 }
                             );

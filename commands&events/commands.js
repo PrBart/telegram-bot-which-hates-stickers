@@ -26,14 +26,14 @@ function start (msg,bot,db) {
                         };
 
                         db.collection('Bots_data').insert(data, (err, results) => {});
-                        bot.sendMessage(msg.chat.id, 'each admin of this conversastion can send me stiicker in reply and i will ban this sticker or entire pack');
+                        bot.sendMessage(msg.chat.id, 'each admin of this conversation can send me stiicker in reply and i will ban this sticker or entire pack');
                     } else {
                         bot.sendMessage(msg.chat.id, 'database for your conversation already been creasted, send me sticker as a replay if you want to ban it or ban intire pack, if youy want to reset sticker list of banned sticlers and packs type /reset@fatfagbot');
                     }
                 });
             },
             error => {
-                bot.sendMessage(msg.chat.id, 'i am not an amdin in this conversetion, please set me as an admin');
+                bot.sendMessage(msg.chat.id, 'i am not an amdin in this conversation, please set me as an admin');
 
             }
         );
