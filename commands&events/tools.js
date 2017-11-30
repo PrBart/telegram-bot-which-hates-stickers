@@ -1,4 +1,4 @@
-function AmIAdmin(msg,bot) {
+function isBotAdmin(msg,bot) {
     return new Promise(function(resolve, reject) {
         Promise.all([bot.getChatAdministrators(msg.chat.id), bot.getMe()]).then(results => {
             for (let i = 0; i < results[0].length; i++) {
@@ -29,5 +29,5 @@ function isUserAdmin(msg,bot) {
     });
 }
 
-module.exports.AmIAdmin = AmIAdmin;
+module.exports.isBotAdmin = isBotAdmin;
 module.exports.isUserAdmin = isUserAdmin;

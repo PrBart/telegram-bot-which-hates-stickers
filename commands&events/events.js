@@ -67,7 +67,7 @@ let chat_id = {
                         if (msg.reply_to_message.from.id == me.id) {
 
                             tools.isUserAdmin(msg, bot).then(confirmed => {
-                                    tools.AmIAdmin(msg, bot).then(
+                                    tools.isBotAdmin(msg, bot).then(
                                         confirmed => {
 
                                             const banNominee = {

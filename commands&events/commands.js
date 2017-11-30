@@ -3,7 +3,7 @@ const  tools = require('./tools.js');
 let ObjectID = require('mongodb').ObjectID;
 
 function start (msg,bot,db) {
-        tools.AmIAdmin(msg,bot).then(
+        tools.isBotAdmin(msg,bot).then(
             confirmed => {
 
                 let chat_id = {
@@ -41,7 +41,7 @@ function start (msg,bot,db) {
 
 function ban (msg,bot,db) {
         if (msg.chat.type != 'private') {
-            tools.AmIAdmin(msg,bot).then(
+            tools.isBotAdmin(msg,bot).then(
                 confirmed => {
                     let chat_id = {
                     "chat_id": msg.chat.id
