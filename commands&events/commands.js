@@ -11,7 +11,6 @@ function start(msg, bot, db) {
             };
 
             db.collection('Bots_data').findOne(chat_id, (err, item) => {
-
                 if (item == null) {
                     let data = {
                         "chat_id": msg.chat.id,
@@ -24,7 +23,6 @@ function start(msg, bot, db) {
                             ]
                         }
                     };
-
                     db.collection('Bots_data').insert(data, (err, results) => {});
                     bot.sendMessage(msg.chat.id, 'each admin of this conversation can send me stiicker in reply and i will ban this sticker or entire pack');
                 } else {
@@ -53,7 +51,6 @@ function ban(msg, bot, db) {
                         bot.sendMessage(msg.chat.id, 'you have to use /start@fatfagbot to activate bot in this chat');
                     }
                 });
-
             },
             error => {
                 bot.sendMessage(msg.chat.id, 'i am not an admin set me as admin');
@@ -91,7 +88,6 @@ function reset(msg, bot, db) {
             });
         }
     );
-
 };
 
 module.exports.ban = ban;

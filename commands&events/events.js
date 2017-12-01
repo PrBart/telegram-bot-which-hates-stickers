@@ -21,8 +21,6 @@ function gotCallBackQuery(msg, bot, db, banNominee) {
                         db.collection('Bots_data').update(id, item);
                         bot.sendMessage(msg.message.chat.id, 'entire pack was banned');
                         bot.removeAllListeners('callback_query');
-
-
                     }
                     if (msg.data == 'onlyOne') {
                         item.banned.stickers.push(banNominee.sticker_id);
@@ -32,9 +30,7 @@ function gotCallBackQuery(msg, bot, db, banNominee) {
                         db.collection('Bots_data').update(id, item);
                         bot.sendMessage(msg.message.chat.id, 'one sticker was banned');
                         bot.removeAllListeners('callback_query');
-
                     }
-
                 } else {
                     bot.sendMessage(msg.chat.id, 'you have to start the bot with /start@fatfagbot');
                 }
@@ -42,13 +38,12 @@ function gotCallBackQuery(msg, bot, db, banNominee) {
         },
         error => {
             bot.answerCallbackQuery(msg.id, 'you are not allowed to use it', true);
-
-
         });
 }
 
 function actionOnReplySticker(msg, bot, db) {
-    tools.isUserAdmin(msg, bot).then(confirmed => {
+    tools.isUserAdmin(msg, bot).then(
+        confirmed => {
             tools.isBotAdmin(msg, bot).then(
                 confirmed => {
 
@@ -75,12 +70,8 @@ function actionOnReplySticker(msg, bot, db) {
                     }
                     bot.sendMessage(msg.chat.id, 'do you want to ban entire pack or only one sticker?', opt);
 
-
-
                     bot.on('callback_query', function(msg) {
-
                         gotCallBackQuery(msg, bot, db, banNominee);
-
                     });
                 },
                 error => {
@@ -93,7 +84,6 @@ function actionOnReplySticker(msg, bot, db) {
                 message_id: msg.reply_to_message.message_id,
                 chat_id: msg.chat.id
             });
-
         }
     );
 }
@@ -109,9 +99,7 @@ function actionOnSticker(msg, bot, db) {
 
             if (item.banned.packs.some(packs => packs == msg.sticker.set_name) == true || item.banned.stickers.some(sticker => sticker == msg.sticker.file_id) == true) {
                 bot.deleteMessage(msg.chat.id, msg.message_id);
-
             } else {
-
                 if (typeof msg.reply_to_message !== 'undefined') {
                     bot.getMe().then(me => {
                         if (msg.reply_to_message.from.id == me.id) {

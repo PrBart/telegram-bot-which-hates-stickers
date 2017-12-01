@@ -11,7 +11,6 @@ function isBotAdmin(msg, bot) {
     });
 }
 
-
 function isUserAdmin(msg, bot) {
     if (!msg.chat) {
         msg.chat = msg.message.chat;
