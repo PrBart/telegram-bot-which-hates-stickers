@@ -10,7 +10,7 @@ function start(msg, bot, db) {
                 "chat_id": msg.chat.id
             };
 
-            db.collection(db.collectionName).findOne(chat_id, (err, item) => {
+            db.collection(db.collectionName).findOne(chat_id, (_, item) => {
                 if (item == null) {
                     let data = {
                         "chat_id": msg.chat.id,
@@ -23,7 +23,7 @@ function start(msg, bot, db) {
                             ]
                         }
                     };
-                    db.collection(db.collectionName).insert(data, (err, results) => {});
+                    db.collection(db.collectionName).insert(data, (_, results) => {});
                     bot.sendMessage(msg.chat.id, 'each admin of this conversation can send me stiicker in reply and i will ban this sticker or entire pack');
                 } else {
                     bot.sendMessage(msg.chat.id, 'database for your conversation already been creasted, send me sticker as a replay if you want to ban it or ban intire pack, if youy want to reset sticker list of banned sticlers and packs type /reset@fatfagbot');
@@ -44,8 +44,8 @@ function ban(msg, bot, db) {
                 let chat_id = {
                     "chat_id": msg.chat.id
                 };
-                db.collection(db.collectionName).findOne(chat_id, (err, item) => {
-                    if (item != null) {
+                db.collection(db.collectionName).findOne(chat_id, (_, item) => {
+                    if (item !== null) {
                         bot.sendMessage(msg.chat.id, 'send me sticker which you want to ban');
                     } else {
                         bot.sendMessage(msg.chat.id, 'you have to use /start@fatfagbot to activate bot in this chat');
@@ -66,8 +66,8 @@ function reset(msg, bot, db) {
             let chat_id = {
                 "chat_id": msg.chat.id
             };
-            db.collection(db.collectionName).findOne(chat_id, (err, item) => {
-                if (item != null) {
+            db.collection(db.collectionName).findOne(chat_id, (_, item) => {
+                if (item !== null) {
                     const clearFields = {
                         "chat_id": msg.chat.id,
                         "banned": {

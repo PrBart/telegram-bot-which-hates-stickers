@@ -2,6 +2,29 @@ const tools = require('./tools.js');
 
 const ObjectID = require('mongodb').ObjectID;
 
+function addBanned (msg, bot, db, db, banNominee, item){
+    if (item === null) {
+        bot.sendMessage(msg.chat.id, 'you have to start the bot with /start@fatfagbot');
+    }
+    if (msg.data == 'entire') {
+        item.banned.packs.push(banNominee.pack_name);
+        const id = {
+            '_id': new ObjectID(item._id)
+        };
+        db.collection(db.collectionName).update(id, item);
+        bot.sendMessage(msg.message.chat.id, 'entire pack was banned');
+        bot.removeAllListeners('callback_query');
+    }
+    if (msg.data == 'onlyOne') {
+        item.banned.stickers.push(banNominee.sticker_id);
+        const id = {
+            '_id': new ObjectID(item._id)
+        };
+        db.collection(db.collectionName).update(id, item);
+        bot.sendMessage(msg.message.chat.id, 'one sticker was banned');
+        bot.removeAllListeners('callback_query');
+    }
+}
 
 function gotCallBackQuery(msg, bot, db, banNominee) {
     bot.answerCallbackQuery(msg.id);
@@ -9,29 +32,8 @@ function gotCallBackQuery(msg, bot, db, banNominee) {
             let chat_id = {
                 "chat_id": msg.message.chat.id
             };
-            db.collection(db.collectionName).findOne(chat_id, (err, item) => {
-                if (item != null) {
-                    if (msg.data == 'entire') {
-                        item.banned.packs.push(banNominee.pack_name);
-                        const id = {
-                            '_id': new ObjectID(item._id)
-                        };
-                        db.collection(db.collectionName).update(id, item);
-                        bot.sendMessage(msg.message.chat.id, 'entire pack was banned');
-                        bot.removeAllListeners('callback_query');
-                    }
-                    if (msg.data == 'onlyOne') {
-                        item.banned.stickers.push(banNominee.sticker_id);
-                        const id = {
-                            '_id': new ObjectID(item._id)
-                        };
-                        db.collection(db.collectionName).update(id, item);
-                        bot.sendMessage(msg.message.chat.id, 'one sticker was banned');
-                        bot.removeAllListeners('callback_query');
-                    }
-                } else {
-                    bot.sendMessage(msg.chat.id, 'you have to start the bot with /start@fatfagbot');
-                }
+            db.collection(db.collectionName).findOne(chat_id, (_, item) => {
+                addBanned (msg, bot, db, db, banNominee, item);
             });
         },
         error => {
@@ -92,8 +94,8 @@ function actionOnSticker(msg, bot, db) {
         "chat_id": msg.chat.id
     };
 
-    db.collection(db.collectionName).findOne(chat_id, (err, item) => {
-        if (item != null) {
+    db.collection(db.collectionName).findOne(chat_id, (_, item) => {
+        if (item !== null) {
 
             if (item.banned.packs.some(packs => packs == msg.sticker.set_name) == true || item.banned.stickers.some(sticker => sticker == msg.sticker.file_id) == true) {
                 bot.deleteMessage(msg.chat.id, msg.message_id);
