@@ -1,6 +1,6 @@
 const  tools = require('./tools.js');
 
-let ObjectID = require('mongodb').ObjectID;
+const ObjectID = require('mongodb').ObjectID;
 
 function start (msg,bot,db) {
         tools.isBotAdmin(msg,bot).then(

@@ -39,7 +39,7 @@ mongoClient.connect(db, function(err, db) {
         commands.ban(msg, bot, db);
     }); 
     bot.on('sticker', function(msg) {
-        events.ActionOnSticker(msg, bot, db);
+        events.actionOnSticker(msg, bot, db);
     });
     bot.onText(new RegExp('/reset@'+botName), function(msg) {
         commands.reset(msg, bot, db);

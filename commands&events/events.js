@@ -1,7 +1,7 @@
 const  tools = require('./tools.js');
 const EventEmitter = require('events').EventEmitter; 
 
-let ObjectID = require('mongodb').ObjectID;
+const ObjectID = require('mongodb').ObjectID;
 
 const event = new EventEmitter;
 
@@ -48,7 +48,7 @@ function gotCallBackQuery (msg, bot, db, banNominee){
 }
 
 
-function ActionOnSticker(msg,bot,db){
+function actionOnSticker(msg,bot,db){
 
 let chat_id = {
             "chat_id": msg.chat.id
@@ -119,4 +119,4 @@ let chat_id = {
         });
 }
 
-module.exports.ActionOnSticker = ActionOnSticker;
+module.exports.actionOnSticker = actionOnSticker;
