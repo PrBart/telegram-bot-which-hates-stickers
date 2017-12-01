@@ -1,9 +1,7 @@
 const tools = require('./tools.js');
-const EventEmitter = require('events').EventEmitter;
 
 const ObjectID = require('mongodb').ObjectID;
 
-const event = new EventEmitter;
 
 function gotCallBackQuery(msg, bot, db, banNominee) {
     bot.answerCallbackQuery(msg.id);
