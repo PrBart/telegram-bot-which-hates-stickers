@@ -3,10 +3,10 @@ function isBotAdmin(msg,bot) {
         Promise.all([bot.getChatAdministrators(msg.chat.id), bot.getMe()]).then(results => {
             for (let i = 0; i < results[0].length; i++) {
                 if (results[0][i].user.id == results[1].id) {
-                    resolve('true');
+                    resolve(1);
                 };
             };
-            reject('false');
+            reject(0);
         });
     });
 }
@@ -21,10 +21,10 @@ function isUserAdmin(msg,bot) {
         bot.getChatAdministrators(msg.chat.id).then(admins => {
             for (let i = 0; i < admins.length; i++) {
                 if (admins[i].user.id == msg.from.id) {
-                    resolve('true');
+                    resolve(1);
                 };
             };
-            reject('false');
+            reject(0);
         });
     });
 }
