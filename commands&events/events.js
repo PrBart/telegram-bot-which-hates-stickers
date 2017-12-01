@@ -9,14 +9,14 @@ function gotCallBackQuery(msg, bot, db, banNominee) {
             let chat_id = {
                 "chat_id": msg.message.chat.id
             };
-            db.collection('Bots_data').findOne(chat_id, (err, item) => {
+            db.collection(db.collectionName).findOne(chat_id, (err, item) => {
                 if (item != null) {
                     if (msg.data == 'entire') {
                         item.banned.packs.push(banNominee.pack_name);
                         const id = {
                             '_id': new ObjectID(item._id)
                         };
-                        db.collection('Bots_data').update(id, item);
+                        db.collection(db.collectionName).update(id, item);
                         bot.sendMessage(msg.message.chat.id, 'entire pack was banned');
                         bot.removeAllListeners('callback_query');
                     }
@@ -25,7 +25,7 @@ function gotCallBackQuery(msg, bot, db, banNominee) {
                         const id = {
                             '_id': new ObjectID(item._id)
                         };
-                        db.collection('Bots_data').update(id, item);
+                        db.collection(db.collectionName).update(id, item);
                         bot.sendMessage(msg.message.chat.id, 'one sticker was banned');
                         bot.removeAllListeners('callback_query');
                     }
@@ -92,7 +92,7 @@ function actionOnSticker(msg, bot, db) {
         "chat_id": msg.chat.id
     };
 
-    db.collection('Bots_data').findOne(chat_id, (err, item) => {
+    db.collection(db.collectionName).findOne(chat_id, (err, item) => {
         if (item != null) {
 
             if (item.banned.packs.some(packs => packs == msg.sticker.set_name) == true || item.banned.stickers.some(sticker => sticker == msg.sticker.file_id) == true) {

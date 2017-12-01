@@ -8,7 +8,7 @@ const commands = require('./commands&events/commands.js');
 const events = require('./commands&events/events.js');
 
 const db = config.url;
-
+const collectionName = config.collectionName;
 const bot = new TelegramBot(config.token, {
     polling: true
 });
@@ -30,6 +30,7 @@ mongoClient.connect(db, function(err, db) {
     if (err) {
         return console.log(err);
     }
+    db.collectionName = collectionName;
     bot.onText(new RegExp('/start@' + botName), function(msg) {
         commands.start(msg, bot, db);
     });
