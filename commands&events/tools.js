@@ -1,4 +1,4 @@
-function isBotAdmin(msg,bot) {
+function isBotAdmin(msg, bot) {
     return new Promise(function(resolve, reject) {
         Promise.all([bot.getChatAdministrators(msg.chat.id), bot.getMe()]).then(results => {
             for (let i = 0; i < results[0].length; i++) {
@@ -12,7 +12,7 @@ function isBotAdmin(msg,bot) {
 }
 
 
-function isUserAdmin(msg,bot) {
+function isUserAdmin(msg, bot) {
     if (!msg.chat) {
         msg.chat = msg.message.chat;
     }
