@@ -3,9 +3,9 @@ const mongoClient = require('mongodb').MongoClient;
 const config = require('./config.js');
 const TelegramBot = require('node-telegram-bot-api');
 
-const commands = require('./commands&events/commands.js');
+const commands = require('./src/commands.js');
 
-const events = require('./commands&events/events.js');
+const events = require('./src/events.js');
 
 const db = config.url;
 const collectionName = config.collectionName;
