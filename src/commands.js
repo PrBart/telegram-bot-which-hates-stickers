@@ -32,13 +32,12 @@ function start(msg, bot, db) {
         },
         error => {
             bot.sendMessage(msg.chat.id, 'i am not an amdin in this conversation, please set me as an admin');
-
         }
     );
 };
 
 function ban(msg, bot, db) {
-    if (msg.chat.type != 'private') {
+    if (msg.chat.type !== 'private') {
         tools.isBotAdmin(msg, bot).then(
             confirmed => {
                 let chat_id = {
